@@ -1,97 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates id="template" xml:space="preserve">
     <!-- Plantilla para vista de calendario de órdenes de servicio -->
-    <t t-name="service_order_calendar_view" owl="1">
-        <div class="o_service_order_calendar">
-            <div class="o_calendar_view">
-                <div class="o_calendar_container">
-                    <div class="o_calendar_sidebar">
-                        <div class="o_calendar_filter">
-                            <h4><t t-esc="widget.filtersTitle or 'Filters'"/></h4>
-                            <div class="o_calendar_filter_section">
-                                <h5><t t-esc="widget.techniciansTitle or 'Technicians'"/></h5>
-                                <div class="o_calendar_filter_items">
-                                    <t t-foreach="widget.technicians" t-as="technician">
-                                        <div class="o_calendar_filter_item">
-                                            <input type="checkbox" 
-                                                   t-att-id="'technician_' + technician.id" 
-                                                   t-att-value="technician.id"
-                                                   t-att-checked="technician.selected ? 'checked' : undefined"/>
-                                            <label t-att-for="'technician_' + technician.id">
-                                                <t t-esc="technician.name"/>
-                                            </label>
-                                        </div>
-                                    </t>
-                                </div>
-                            </div>
-                            <div class="o_calendar_filter_section">
-                                <h5><t t-esc="widget.serviceTypesTitle or 'Service Types'"/></h5>
-                                <div class="o_calendar_filter_items">
-                                    <t t-foreach="widget.service_types" t-as="service_type">
-                                        <div class="o_calendar_filter_item">
-                                            <input type="checkbox" 
-                                                   t-att-id="'service_type_' + service_type.id" 
-                                                   t-att-value="service_type.id"
-                                                   t-att-checked="service_type.selected ? 'checked' : undefined"/>
-                                            <label t-att-for="'service_type_' + service_type.id">
-                                                <t t-esc="service_type.name"/>
-                                            </label>
-                                        </div>
-                                    </t>
-                                </div>
-                            </div>
-                            <div class="o_calendar_filter_section">
-                                <h5><t t-esc="widget.statesTitle or 'States'"/></h5>
-                                <div class="o_calendar_filter_items">
-                                    <t t-foreach="widget.states" t-as="state">
-                                        <div class="o_calendar_filter_item">
-                                            <input type="checkbox" 
-                                                   t-att-id="'state_' + state.value" 
-                                                   t-att-value="state.value"
-                                                   t-att-checked="state.selected ? 'checked' : undefined"/>
-                                            <label t-att-for="'state_' + state.value">
-                                                <t t-esc="state.label"/>
-                                            </label>
-                                        </div>
-                                    </t>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="o_calendar_content">
-                        <div class="o_calendar_header">
-                            <div class="o_calendar_navigation">
-                                <button class="btn btn-secondary o_calendar_button_prev">
-                                    <i class="fa fa-chevron-left"></i>
-                                </button>
-                                <div class="o_calendar_title"><t t-esc="widget.title"/></div>
-                                <button class="btn btn-secondary o_calendar_button_next">
-                                    <i class="fa fa-chevron-right"></i>
-                                </button>
-                                <button class="btn btn-secondary o_calendar_button_today">Today</button>
-                            </div>
-                            <div class="o_calendar_view_mode">
-                                <button class="btn btn-secondary o_calendar_button_day">Day</button>
-                                <button class="btn btn-secondary o_calendar_button_week active">Week</button>
-                                <button class="btn btn-secondary o_calendar_button_month">Month</button>
-                            </div>
-                        </div>
-                        <div class="o_calendar_body">
-                            <!-- Contenido del calendario generado dinámicamente -->
-                        </div>
-                    </div>
-                </div>
+    <t t-name="calendar-box" owl="1">
+        <div class="o_calendar_box">
+            <div class="o_calendar_color_strip" t-att-style="'background-color: ' + record.color"/>
+            <div class="o_calendar_title">
+                <t t-esc="record.name"/>
+            </div>
+            <div class="o_calendar_subtitle">
+                <t t-esc="record.partner_id"/>
+            </div>
+            <div class="o_calendar_info">
+                <span t-if="record.service_type_id">
+                    <t t-esc="record.service_type_id"/>
+                </span>
+                <span t-if="record.technician_id">
+                    <t t-esc="record.technician_id"/>
+                </span>
+            </div>
+        </div>
+    </t>
+    
+    <t t-name="calendar-popover" owl="1">
+        <div class="o_calendar_popover">
+            <div class="o_calendar_title">
+                <strong><t t-esc="record.name"/></strong>
+            </div>
+            <div class="o_calendar_content">
+                <div><t t-esc="record.partner_id"/></div>
+                <div>Type: <t t-esc="record.service_type_id"/></div>
+                <div>Technician: <t t-esc="record.technician_id"/></div>
+                <div>Equipment: <t t-esc="record.equipment_id"/></div>
+                <div>Status: <t t-esc="record.state"/></div>
+                <div>Priority: <t t-esc="record.priority"/></div>
+                <div>Scheduled: <t t-esc="record.date_scheduled"/></div>
+                <div>Completed: <t t-esc="record.date_completed"/></div>
             </div>
         </div>
     </t>
 
     <!-- Plantilla para evento de calendario -->
-    <t t-name="service_order_calendar_event" owl="1">
+    <t t-name="calendar-event" owl="1">
         <div class="o_service_order_event" t-att-class="event_class + ' o_event_' + event.state">
             <div class="o_event_time">
-                <span class="o_event_start_time"><t t-esc="widget.format_time(event.start)"/></span>
+                <span class="o_event_start_time"><t t-esc="format_time(event.start)"/></span>
                 <span>-</span>
-                <span class="o_event_end_time"><t t-esc="widget.format_time(event.end)"/></span>
+                <span class="o_event_end_time"><t t-esc="format_time(event.end)"/></span>
             </div>
             <div class="o_event_content">
                 <div class="o_event_title"><t t-esc="event.title"/></div>
@@ -114,7 +68,7 @@
     </t>
 
     <!-- Plantilla para tooltip de evento -->
-    <t t-name="service_order_calendar_event_tooltip" owl="1">
+    <t t-name="calendar-event-tooltip" owl="1">
         <div class="o_calendar_tooltip">
             <div class="o_tooltip_header">
                 <strong><t t-esc="event.title"/></strong>
@@ -124,33 +78,33 @@
             </div>
             <div class="o_tooltip_body">
                 <div class="o_tooltip_row">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Date:')"/></span>
-                    <span class="o_tooltip_value"><t t-esc="widget.format_date(event.start)"/></span>
+                    <span class="o_tooltip_label">Date:</span>
+                    <span class="o_tooltip_value"><t t-esc="format_date(event.start)"/></span>
                 </div>
                 <div class="o_tooltip_row">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Time:')"/></span>
+                    <span class="o_tooltip_label">Time:</span>
                     <span class="o_tooltip_value">
-                        <t t-esc="widget.format_time(event.start)"/> - <t t-esc="widget.format_time(event.end)"/>
+                        <t t-esc="format_time(event.start)"/> - <t t-esc="format_time(event.end)"/>
                     </span>
                 </div>
                 <div class="o_tooltip_row" t-if="event.partner_name">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Customer:')"/></span>
+                    <span class="o_tooltip_label">Customer:</span>
                     <span class="o_tooltip_value"><t t-esc="event.partner_name"/></span>
                 </div>
                 <div class="o_tooltip_row" t-if="event.technician_name">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Technician:')"/></span>
+                    <span class="o_tooltip_label">Technician:</span>
                     <span class="o_tooltip_value"><t t-esc="event.technician_name"/></span>
                 </div>
                 <div class="o_tooltip_row" t-if="event.service_type">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Service Type:')"/></span>
+                    <span class="o_tooltip_label">Service Type:</span>
                     <span class="o_tooltip_value"><t t-esc="event.service_type"/></span>
                 </div>
                 <div class="o_tooltip_row" t-if="event.location">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Location:')"/></span>
+                    <span class="o_tooltip_label">Location:</span>
                     <span class="o_tooltip_value"><t t-esc="event.location"/></span>
                 </div>
                 <div class="o_tooltip_row" t-if="event.description">
-                    <span class="o_tooltip_label"><t t-esc="widget._t('Description:')"/></span>
+                    <span class="o_tooltip_label">Description:</span>
                     <span class="o_tooltip_value"><t t-esc="event.description"/></span>
                 </div>
             </div>
@@ -158,7 +112,7 @@
     </t>
 
     <!-- Plantilla para popover de evento -->
-    <t t-name="service_order_calendar_event_popover" owl="1">
+    <t t-name="calendar-event-popover" owl="1">
         <div class="o_calendar_popover">
             <div class="o_popover_header">
                 <h4><t t-esc="event.title"/></h4>
@@ -168,42 +122,42 @@
             </div>
             <div class="o_popover_body">
                 <div class="o_popover_row">
-                    <span class="o_popover_label"><t t-esc="widget._t('Date:')"/></span>
-                    <span class="o_popover_value"><t t-esc="widget.format_date(event.start)"/></span>
+                    <span class="o_popover_label">Date:</span>
+                    <span class="o_popover_value"><t t-esc="format_date(event.start)"/></span>
                 </div>
                 <div class="o_popover_row">
-                    <span class="o_popover_label"><t t-esc="widget._t('Time:')"/></span>
+                    <span class="o_popover_label">Time:</span>
                     <span class="o_popover_value">
-                        <t t-esc="widget.format_time(event.start)"/> - <t t-esc="widget.format_time(event.end)"/>
+                        <t t-esc="format_time(event.start)"/> - <t t-esc="format_time(event.end)"/>
                     </span>
                 </div>
                 <div class="o_popover_row" t-if="event.partner_name">
-                    <span class="o_popover_label"><t t-esc="widget._t('Customer:')"/></span>
+                    <span class="o_popover_label">Customer:</span>
                     <span class="o_popover_value"><t t-esc="event.partner_name"/></span>
                 </div>
                 <div class="o_popover_row" t-if="event.technician_name">
-                    <span class="o_popover_label"><t t-esc="widget._t('Technician:')"/></span>
+                    <span class="o_popover_label">Technician:</span>
                     <span class="o_popover_value"><t t-esc="event.technician_name"/></span>
                 </div>
                 <div class="o_popover_row" t-if="event.service_type">
-                    <span class="o_popover_label"><t t-esc="widget._t('Service Type:')"/></span>
+                    <span class="o_popover_label">Service Type:</span>
                     <span class="o_popover_value"><t t-esc="event.service_type"/></span>
                 </div>
                 <div class="o_popover_row" t-if="event.location">
-                    <span class="o_popover_label"><t t-esc="widget._t('Location:')"/></span>
+                    <span class="o_popover_label">Location:</span>
                     <span class="o_popover_value"><t t-esc="event.location"/></span>
                 </div>
                 <div class="o_popover_row" t-if="event.description">
-                    <span class="o_popover_label"><t t-esc="widget._t('Description:')"/></span>
+                    <span class="o_popover_label">Description:</span>
                     <span class="o_popover_value"><t t-esc="event.description"/></span>
                 </div>
             </div>
             <div class="o_popover_footer">
                 <button class="btn btn-primary btn-sm o_popover_edit">
-                    <i class="fa fa-pencil"/> <t t-esc="widget._t('Edit')"/>
+                    <i class="fa fa-pencil"/> Edit
                 </button>
                 <button class="btn btn-secondary btn-sm o_popover_close">
-                    <t t-esc="widget._t('Close')"/>
+                    Close
                 </button>
             </div>
         </div>
