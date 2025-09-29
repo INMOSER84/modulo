@@ -6,73 +6,236 @@
             <t t-call="web.html_container">
                 <t t-call="web.external_layout">
                     <div class="page">
-                        <h2>Service Certificate</h2>
-                        <div class="row mt32 mb32">
-                            <div class="col-6">
-                                <strong>Service Order:</strong>
-                                <p t-field="doc.name"/>
-                                <strong>Service Type:</strong>
-                                <p t-field="doc.service_type_id.name"/>
-                                <strong>Equipment:</strong>
-                                <p t-field="doc.equipment_id.name"/>
-                            </div>
-                            <div class="col-6">
-                                <strong>Customer:</strong>
-                                <p t-field="doc.partner_id.name"/>
-                                <strong>Technician:</strong>
-                                <p t-field="doc.technician_id.name"/>
-                                <strong>Completion Date:</strong>
-                                <p t-field="doc.date_completed"/>
+                        <div class="text-center mb-4">
+                            <h1>Service Certificate</h1>
+                            <h2>Certificate of Service Completion</h2>
+                            <div class="d-inline-block border rounded p-2 bg-light">
+                                <strong>Certificate No:</strong> <span t-field="doc.name"/>
                             </div>
                         </div>
                         
-                        <h3>Service Details</h3>
-                        <p t-field="doc.description"/>
-                        
-                        <h3>Work Performed</h3>
-                        <table class="table table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th>Unit Price</th>
-                                    <th>Subtotal</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr t-foreach="doc.refaction_line_ids" t-as="line">
-                                    <td><span t-field="line.product_id.name"/></td>
-                                    <td><span t-field="line.quantity"/></td>
-                                    <td><span t-field="line.unit_price"/></td>
-                                    <td><span t-field="line.subtotal"/></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        
-                        <div class="row mt32">
+                        <div class="row mt-4 mb-4">
                             <div class="col-6">
-                                <p>Technician Signature:</p>
-                                <div class="border-bottom border-dark" style="height: 80px;"></div>
+                                <div class="card">
+                                    <div class="card-header bg-primary text-white">
+                                        <h5 class="card-title mb-0">Service Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Service Order:</strong></div>
+                                            <div class="col-7"><span t-field="doc.name"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Service Type:</strong></div>
+                                            <div class="col-7"><span t-field="doc.service_type_id.name"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Equipment:</strong></div>
+                                            <div class="col-7"><span t-field="doc.equipment_id.name"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Serial Number:</strong></div>
+                                            <div class="col-7"><span t-field="doc.equipment_id.serial_number"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Completion Date:</strong></div>
+                                            <div class="col-7"><span t-field="doc.date_completed"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Duration:</strong></div>
+                                            <div class="col-7"><span t-field="doc.duration"/> hours</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-6">
-                                <p>Customer Signature:</p>
-                                <div class="border-bottom border-dark" style="height: 80px;"></div>
+                                <div class="card">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="card-title mb-0">Customer Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Customer:</strong></div>
+                                            <div class="col-7"><span t-field="doc.partner_id.name"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Address:</strong></div>
+                                            <div class="col-7"><span t-field="doc.partner_id.street"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Phone:</strong></div>
+                                            <div class="col-7"><span t-field="doc.partner_id.phone"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Email:</strong></div>
+                                            <div class="col-7"><span t-field="doc.partner_id.email"/></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+
+                        <div class="row mt-4 mb-4">
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h5 class="card-title mb-0">Technician Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Technician:</strong></div>
+                                            <div class="col-7"><span t-field="doc.technician_id.name"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Specialization:</strong></div>
+                                            <div class="col-7"><span t-field="doc.technician_id.specialization"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Certification:</strong></div>
+                                            <div class="col-7"><span t-field="doc.technician_id.certification"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h5 class="card-title mb-0">Warranty Information</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Warranty Status:</strong></div>
+                                            <div class="col-7">
+                                                <t t-if="doc.equipment_id.warranty_end and doc.equipment_id.warranty_end >= datetime.datetime.now().strftime('%Y-%m-%d')">
+                                                    <span class="badge bg-success">Under Warranty</span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="badge bg-danger">Out of Warranty</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Warranty End:</strong></div>
+                                            <div class="col-7"><span t-field="doc.equipment_id.warranty_end"/></div>
+                                        </div>
+                                        <div class="row mb-2">
+                                            <div class="col-5"><strong>Next Service:</strong></div>
+                                            <div class="col-7"><span t-field="doc.equipment_id.next_service_date"/></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-4 mb-4">
+                            <div class="card-header bg-secondary text-white">
+                                <h5 class="card-title mb-0">Service Details</h5>
+                            </div>
+                            <div class="card-body">
+                                <h6>Service Description:</h6>
+                                <p t-field="doc.description"/>
+                                
+                                <h6 class="mt-3">Work Performed:</h6>
+                                <p t-field="doc.notes"/>
+                                
+                                <h6 class="mt-3">Materials Used:</h6>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Price</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="doc.refaction_line_ids" t-as="line">
+                                            <td><span t-field="line.product_id.name"/></td>
+                                            <td><span t-field="line.quantity"/></td>
+                                            <td><span t-field="line.unit_price"/></td>
+                                            <td><span t-field="line.subtotal"/></td>
+                                        </tr>
+                                        <t t-if="not doc.refaction_line_ids">
+                                            <tr>
+                                                <td colspan="4" class="text-center">No materials used</td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+                                            <td><strong t-esc="sum(doc.refaction_line_ids.mapped('subtotal'))"/></strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card mt-4 mb-4">
+                            <div class="card-header bg-dark text-white">
+                                <h5 class="card-title mb-0">Declaration</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>We hereby certify that the above mentioned service has been completed according to the manufacturer's specifications and industry standards. This certificate is valid for warranty purposes and service history verification.</p>
+                                
+                                <div class="row mt-4">
+                                    <div class="col-6 text-center">
+                                        <div class="border-bottom border-dark" style="height: 60px;"></div>
+                                        <p class="mt-2"><strong>Technician Signature</strong></p>
+                                        <p><span t-field="doc.technician_id.name"/></p>
+                                    </div>
+                                    <div class="col-6 text-center">
+                                        <div class="border-bottom border-dark" style="height: 60px;"></div>
+                                        <p class="mt-2"><strong>Customer Signature</strong></p>
+                                        <p><span t-field="doc.partner_id.name"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Company Information</h5>
+                                        <p><strong>Company:</strong> <span t-field="doc.company_id.name"/></p>
+                                        <p><strong>Address:</strong> <span t-field="doc.company_id.street"/></p>
+                                        <p><strong>Phone:</strong> <span t-field="doc.company_id.phone"/></p>
+                                        <p><strong>Email:</strong> <span t-field="doc.company_id.email"/></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4 text-center">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">QR Code</h5>
+                                        <img t-att-src="'data:image/png;base64,'+ doc.qr_code" style="max-width: 120px;"/>
+                                        <p class="mt-2 small">Scan to verify</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <small class="text-muted">
+                                Generated on <t t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+                            </small>
                         </div>
                     </div>
                 </t>
             </t>
         </template>
-        
+
         <!-- Acción de reporte -->
         <record id="action_report_service_certificate" model="ir.actions.report">
             <field name="name">Service Certificate</field>
             <field name="model">service.order</field>
             <field name="report_type">qweb-pdf</field>
-            <field name="report_name">inmoser_service_order.report_service_certificate_document</field>
-            <field name="report_file">inmoser_service_order.report_service_certificate_document</field>
+            <field name="report_name">modulo.report_service_certificate_document</field>
+            <field name="report_file">modulo.report_service_certificate_document</field>
             <field name="binding_model_id" ref="model_service_order"/>
             <field name="binding_type">report</field>
+            <field name="print_report_name">'Service Certificate - %s' % (object.name)</field>
         </record>
     </data>
 </odoo>

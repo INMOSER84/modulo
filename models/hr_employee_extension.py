@@ -1,9 +1,9 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 class HrEmployeeExtension(models.AbstractModel):
     _name = 'hr.employee.extension'
     _description = 'HR Employee Extension for Service Orders'
-    
+
     is_technician = fields.Boolean(string='Is Technician', default=False)
     technician_code = fields.Char(string='Technician Code')
     specialization = fields.Char(string='Specialization')
@@ -11,20 +11,20 @@ class HrEmployeeExtension(models.AbstractModel):
     certification_date = fields.Date(string='Certification Date')
     certification_expiry = fields.Date(string='Certification Expiry')
     service_order_count = fields.Integer(compute='_compute_service_order_count', string='Service Orders')
-    
+
     def _compute_service_order_count(self):
         for employee in self:
             employee.service_order_count = self.env['service.order'].search_count([
                 ('technician_id', '=', employee.id)
             ])
-    
+
     def action_view_service_orders(self):
         self.ensure_one()
-        action = self.env.ref('inmoser_service_order.action_service_order').read()[0]
+        action = self.env.ref('modulo.action_service_order').read()[0]
         action['domain'] = [('technician_id', '=', self.id)]
         action['context'] = {'default_technician_id': self.id}
         return action
-    
+
     def check_certification_validity(self):
         """Check if certification is still valid"""
         for employee in self:
@@ -34,6 +34,7 @@ class HrEmployeeExtension(models.AbstractModel):
                 if manager:
                     self.env['mail.thread'].message_notify(
                         partner_ids=manager.partner_id.ids,
-                        subject=f"Certification Expired for {employee.name}",
-                        body=f"The certification for {employee.name} has expired on {employee.certification_expiry}."
+                        subject=_("Certification Expired for %s", employee.name),
+                        body=_("The certification for %s has expired on %s.", employee.name, employee.certification_expiry),
+                        email_layout_xmlid='mail.mail_notification_light'
                     )

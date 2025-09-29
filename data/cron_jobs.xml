@@ -11,9 +11,11 @@
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field name="doall">False</field>
-            <field name="active">True</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">10</field>
         </record>
-        
+
         <!-- Tarea programada para verificar garantías de equipos -->
         <record id="ir_cron_equipment_warranty_check" model="ir.cron">
             <field name="name">Equipment: Warranty Check</field>
@@ -24,7 +26,40 @@
             <field name="interval_type">days</field>
             <field name="numbercall">-1</field>
             <field name="doall">False</field>
-            <field name="active">True</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">15</field>
+        </record>
+
+        <!-- Tarea programada para verificar certificaciones de técnicos -->
+        <record id="ir_cron_technician_certification_check" model="ir.cron">
+            <field name="name">Technician: Certification Check</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="state">code</field>
+            <field name="code">model.search([('is_technician', '=', True)]).check_certification_validity()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall">False</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">20</field>
+        </record>
+
+        <!-- Tarea programada para generar reportes de servicio -->
+        <record id="ir_cron_service_report_generator" model="ir.cron">
+            <field name="name">Service: Monthly Report Generator</field>
+            <field name="model_id" ref="model_service_order_business_logic"/>
+            <field name="state">code</field>
+            <field name="code">model._generate_monthly_service_report()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="doall">False</field>
+            <field name="active" eval="True"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="priority">5</field>
+            <field name="nextcall" eval="(datetime.datetime.now() + datetime.timedelta(days=32)).replace(day=1, hour=2, minute=0)"/>
         </record>
     </data>
 </odoo>

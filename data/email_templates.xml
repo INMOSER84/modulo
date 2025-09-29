@@ -17,10 +17,11 @@
                     <p>${user.company_id.name}</p>
                 </div>
             </field>
-            <field name="auto_delete">True</field>
+            <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">${object.partner_id.email}</field>
         </record>
-        
+
         <!-- Plantilla de correo para notificación de orden de servicio completada -->
         <record id="email_template_service_completed" model="mail.template">
             <field name="name">Service Order Completed</field>
@@ -38,8 +39,136 @@
                     <p>${user.company_id.name}</p>
                 </div>
             </field>
-            <field name="auto_delete">True</field>
+            <field name="auto_delete" eval="True"/>
             <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+            <field name="report_template" ref="report_service_order"/>
+            <field name="report_name">${object.name}_Certificate.pdf</field>
+        </record>
+
+        <!-- Plantilla de correo para notificación de orden de servicio reprogramada -->
+        <record id="email_template_service_reprogrammed" model="mail.template">
+            <field name="name">Service Order Reprogrammed</field>
+            <field name="model_id" ref="model_service_order"/>
+            <field name="subject">Service Order Reprogrammed - ${object.name}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear ${object.partner_id.name},</p>
+                    <p>Your service order <strong>${object.name}</strong> has been reprogrammed.</p>
+                    <p><strong>New Scheduled Date:</strong> ${object.date_scheduled}</p>
+                    <p><strong>Previous Date:</strong> ${object.date_scheduled}</p>
+                    <p><strong>Reason:</strong> ${ctx.get('reprogram_reason', 'Not specified')}</p>
+                    <p>If you have any questions, please contact us.</p>
+                    <p>Thank you,</p>
+                    <p>${user.company_id.name}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+        </record>
+
+        <!-- Plantilla de correo para notificación de garantía por expirar -->
+        <record id="email_template_warranty_expiration" model="mail.template">
+            <field name="name">Equipment Warranty Expiration</field>
+            <field name="model_id" ref="model_service_equipment"/>
+            <field name="subject">Warranty Expiration Notice - ${object.name}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear ${object.partner_id.name},</p>
+                    <p>This is to inform you that the warranty for your equipment <strong>${object.name}</strong> will expire on <strong>${object.warranty_end}</strong>.</p>
+                    <p><strong>Equipment Details:</strong></p>
+                    <ul>
+                        <li>Model: ${object.model}</li>
+                        <li>Serial Number: ${object.serial_number}</li>
+                        <li>Manufacturer: ${object.manufacturer}</li>
+                    </ul>
+                    <p>Please contact us to renew your warranty or schedule a maintenance service.</p>
+                    <p>Thank you,</p>
+                    <p>${user.company_id.name}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+        </record>
+
+        <!-- Plantilla de correo para notificación de certificación expirada -->
+        <record id="email_template_certification_expired" model="mail.template">
+            <field name="name">Technician Certification Expired</field>
+            <field name="model_id" ref="model_hr_employee"/>
+            <field name="subject">Certification Expired - ${object.name}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear Manager,</p>
+                    <p>This is to inform you that the certification for technician <strong>${object.name}</strong> has expired.</p>
+                    <p><strong>Certification Details:</strong></p>
+                    <ul>
+                        <li>Certification: ${object.certification}</li>
+                        <li>Expiration Date: ${object.certification_expiry}</li>
+                        <li>Specialization: ${object.specialization}</li>
+                    </ul>
+                    <p>Please take necessary action to renew the certification.</p>
+                    <p>Thank you,</p>
+                    <p>${user.company_id.name}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="email_to">${object.parent_id.work_email or object.department_id.manager_id.work_email or user.company_id.email}</field>
+        </record>
+
+        <!-- Plantilla de correo para recordatorio de servicio -->
+        <record id="email_template_service_reminder" model="mail.template">
+            <field name="name">Service Reminder</field>
+            <field name="model_id" ref="model_service_order"/>
+            <field name="subject">Service Reminder - ${object.name}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear ${object.partner_id.name},</p>
+                    <p>This is a reminder that your service order <strong>${object.name}</strong> is scheduled for <strong>${object.date_scheduled}</strong>.</p>
+                    <p><strong>Service Details:</strong></p>
+                    <ul>
+                        <li>Service Type: ${object.service_type_id.name}</li>
+                        <li>Technician: ${object.technician_id.name or 'To be assigned'}</li>
+                        <li>Equipment: ${object.equipment_id.name or 'Not specified'}</li>
+                    </ul>
+                    <p>Please ensure someone is available at the location during the scheduled time.</p>
+                    <p>Thank you,</p>
+                    <p>${user.company_id.name}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="email_to">${object.partner_id.email}</field>
+        </record>
+
+        <!-- Plantilla de correo para reporte mensual de servicios -->
+        <record id="email_template_monthly_service_report" model="mail.template">
+            <field name="name">Monthly Service Report</field>
+            <field name="model_id" ref="model_service_order_business_logic"/>
+            <field name="subject">Monthly Service Report - ${ctx.get('report_month', datetime.date.today().strftime('%B %Y'))}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p>Dear Manager,</p>
+                    <p>Please find attached the monthly service report for <strong>${ctx.get('report_month', datetime.date.today().strftime('%B %Y'))}</strong>.</p>
+                    <p><strong>Report Summary:</strong></p>
+                    <ul>
+                        <li>Total Service Orders: ${ctx.get('total_orders', 0)}</li>
+                        <li>Completed Orders: ${ctx.get('completed_orders', 0)}</li>
+                        <li>Average Duration: ${ctx.get('average_duration', 0)} hours</li>
+                        <li>Total Revenue: ${ctx.get('total_revenue', 0)}</li>
+                    </ul>
+                    <p>For detailed information, please refer to the attached report.</p>
+                    <p>Thank you,</p>
+                    <p>${user.company_id.name}</p>
+                </div>
+            </field>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${user.partner_id.lang}</field>
+            <field name="email_to">${user.company_id.email}</field>
+            <field name="report_template" ref="report_monthly_service"/>
+            <field name="report_name">Monthly_Service_Report_${ctx.get('report_month', datetime.date.today().strftime('%Y_%m'))}.pdf</field>
         </record>
     </data>
 </odoo>

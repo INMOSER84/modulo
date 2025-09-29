@@ -1,9 +1,12 @@
 from odoo import models, fields, api, _
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class StockIntegration(models.AbstractModel):
     _name = 'stock.integration'
     _description = 'Stock Integration for Service Orders'
-    
+
     def check_product_availability(self, product, quantity):
         """Check if a product is available in stock"""
         quant = self.env['stock.quant'].search([
@@ -11,25 +14,25 @@ class StockIntegration(models.AbstractModel):
             ('location_id.usage', '=', 'internal'),
             ('quantity', '>', 0)
         ], limit=1)
-        
+
         if quant:
             return quant.quantity >= quantity
         return False
-    
+
     def reserve_product_for_service(self, product, quantity):
         """Reserve a product for a service order"""
         if not self.check_product_availability(product, quantity):
             return False
-        
+
         # Find a suitable location
         location = self.env['stock.location'].search([
             ('usage', '=', 'internal'),
             ('company_id', '=', self.env.company.id)
         ], limit=1)
-        
+
         if not location:
             return False
-        
+
         # Create a stock move
         move_vals = {
             'name': f'Reserve for service order',
@@ -41,13 +44,13 @@ class StockIntegration(models.AbstractModel):
             'move_type': 'direct',
             'state': 'confirmed',
         }
-        
+
         move = self.env['stock.move'].create(move_vals)
         move._action_confirm()
         move._action_assign()
-        
+
         return move
-    
+
     def consume_product_for_service(self, product, quantity, service_order):
         """Consume a product for a service order"""
         # Find a suitable location
@@ -55,10 +58,19 @@ class StockIntegration(models.AbstractModel):
             ('usage', '=', 'internal'),
             ('company_id', '=', self.env.company.id)
         ], limit=1)
-        
+
         if not location:
             return False
-        
+
+        # Get consumption location
+        consumption_location = self.env.ref('stock.location_consumption', raise_if_not_found=False)
+        if not consumption_location:
+            _logger.warning("Consumption location not found. Using scrap location instead.")
+            consumption_location = self.env.ref('stock.stock_location_scrapped', raise_if_not_found=False)
+            if not consumption_location:
+                _logger.error("Neither consumption nor scrap location found.")
+                return False
+
         # Create a stock move to consume the product
         move_vals = {
             'name': f'Consume for service order {service_order.name}',
@@ -66,19 +78,19 @@ class StockIntegration(models.AbstractModel):
             'product_uom': product.uom_id.id,
             'product_uom_qty': quantity,
             'location_id': location.id,
-            'location_dest_id': self.env.ref('stock.location_consumption').id,
+            'location_dest_id': consumption_location.id,
             'move_type': 'direct',
             'origin': service_order.name,
             'state': 'confirmed',
         }
-        
+
         move = self.env['stock.move'].create(move_vals)
         move._action_confirm()
         move._action_assign()
         move._action_done()
-        
+
         return move
-    
+
     def return_product_from_service(self, product, quantity, service_order):
         """Return a product from a service order"""
         # Find a suitable location
@@ -86,56 +98,74 @@ class StockIntegration(models.AbstractModel):
             ('usage', '=', 'internal'),
             ('company_id', '=', self.env.company.id)
         ], limit=1)
-        
+
         if not location:
             return False
-        
+
+        # Get consumption location
+        consumption_location = self.env.ref('stock.location_consumption', raise_if_not_found=False)
+        if not consumption_location:
+            consumption_location = self.env.ref('stock.stock_location_scrapped', raise_if_not_found=False)
+            if not consumption_location:
+                _logger.error("Neither consumption nor scrap location found.")
+                return False
+
         # Create a stock move to return the product
         move_vals = {
             'name': f'Return from service order {service_order.name}',
             'product_id': product.id,
             'product_uom': product.uom_id.id,
             'product_uom_qty': quantity,
-            'location_id': self.env.ref('stock.location_consumption').id,
+            'location_id': consumption_location.id,
             'location_dest_id': location.id,
             'move_type': 'direct',
             'origin': service_order.name,
             'state': 'confirmed',
         }
-        
+
         move = self.env['stock.move'].create(move_vals)
         move._action_confirm()
         move._action_assign()
         move._action_done()
-        
+
         return move
-    
+
     def create_picking_for_service_order(self, service_order):
         """Create a picking for a service order"""
         if not service_order.refaction_line_ids:
             return False
-        
+
         # Find a suitable location
         location = self.env['stock.location'].search([
             ('usage', '=', 'internal'),
             ('company_id', '=', self.env.company.id)
         ], limit=1)
-        
+
         if not location:
             return False
-        
+
+        # Get customer location
+        customer_location = self.env.ref('stock.location_customers', raise_if_not_found=False)
+        if not customer_location:
+            _logger.warning("Customer location not found. Using partner location instead.")
+            if service_order.partner_id.property_stock_customer:
+                customer_location = service_order.partner_id.property_stock_customer
+            else:
+                _logger.error("No customer location found.")
+                return False
+
         # Create picking
         picking_vals = {
             'partner_id': service_order.partner_id.id,
             'picking_type_id': self.env.ref('stock.picking_type_out').id,
             'location_id': location.id,
-            'location_dest_id': self.env.ref('stock.location_customers').id,
+            'location_dest_id': customer_location.id,
             'origin': service_order.name,
             'move_type': 'direct',
         }
-        
+
         picking = self.env['stock.picking'].create(picking_vals)
-        
+
         # Create moves
         for line in service_order.refaction_line_ids:
             move_vals = {
@@ -145,10 +175,10 @@ class StockIntegration(models.AbstractModel):
                 'product_uom_qty': line.quantity,
                 'picking_id': picking.id,
                 'location_id': location.id,
-                'location_dest_id': self.env.ref('stock.location_customers').id,
+                'location_dest_id': customer_location.id,
                 'state': 'confirmed',
             }
-            
+
             self.env['stock.move'].create(move_vals)
-        
+
         return picking

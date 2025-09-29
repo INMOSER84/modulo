@@ -1,22 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
-        <!-- Vista de calendario para órdenes de servicio -->
-        <record id="view_service_order_calendar" model="ir.ui.view">
-            <field name="name">service.order.calendar</field>
-            <field name="model">service.order</field>
-            <field name="arch" type="xml">
-                <calendar string="Service Orders" date_start="date_scheduled" date_stop="date_completed" 
-                         color="technician_id" mode="month" quick_add="False">
-                    <field name="name"/>
-                    <field name="partner_id"/>
-                    <field name="service_type_id"/>
-                    <field name="state"/>
-                    <field name="priority"/>
-                    <field name="technician_id"/>
-                    <field name="equipment_id"/>
-                </calendar>
-            </field>
-        </record>
-    </data>
+    <!-- Vista de calendario para órdenes de servicio -->
+    <record id="view_service_order_calendar" model="ir.ui.view">
+        <field name="name">service.order.calendar</field>
+        <field name="model">service.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Service Orders" 
+                     date_start="date_scheduled" 
+                     date_stop="date_completed"
+                     color="technician_id" 
+                     mode="month" 
+                     quick_add="False"
+                     event_open_popup="true"
+                     form_view_id="%(view_service_order_form)s">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="service_type_id"/>
+                <field name="state"/>
+                <field name="priority"/>
+                <field name="technician_id"/>
+                <field name="equipment_id"/>
+                <templates>
+                    <div t-name="calendar-box" class="o_calendar_box">
+                        <div class="o_calendar_color_strip" t-att-style="color: record.color"/>
+                        <div class="o_calendar_title">
+                            <field name="name"/>
+                        </div>
+                        <div class="o_calendar_subtitle">
+                            <field name="partner_id" display="full_name"/>
+                        </div>
+                        <div class="o_calendar_info">
+                            <span t-if="record.service_type_id">
+                                <field name="service_type_id" display="name"/>
+                            </span>
+                            <span t-if="record.technician_id">
+                                <field name="technician_id" display="name"/>
+                            </span>
+                        </div>
+                    </div>
+                </templates>
+            </calendar>
+        </field>
+    </record>
 </odoo>

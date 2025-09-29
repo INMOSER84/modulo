@@ -1,12 +1,13 @@
+# -*- coding: utf-8 -*-
 {
-    'name': 'Inmoser Service Order',
+    'name': 'Inmoser Service Management',
     'version': '17.0.1.0.0',
     'category': 'Service Management',
-    'summary': 'Service Order Management for Inmoser',
+    'summary': 'Complete Service Order Management System for Technical Services',
     'author': 'INMOSER84',
     'website': 'https://github.com/INMOSER84/inmoser_service_order',
     'license': 'LGPL-3',
-    'depends': ['base', 'web', 'mail', 'account', 'stock', 'hr', 'portal'],
+    'depends': ['base', 'web', 'mail', 'account', 'stock', 'hr', 'portal', 'calendar', 'product', 'contacts'],
     'data': [
         'security/ir.model.access.csv',
         'security/inmoser_security.xml',
@@ -30,10 +31,32 @@
         'reports/service_certificate_template.xml',
         'reports/equipment_history_template.xml',
         'reports/technician_performance_template.xml',
-        'static/src/xml/service_order_qr.xml',
-        'static/src/xml/calendar_templates.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'modulo/static/src/css/portal.scss',
+            'modulo/static/src/css/service_order.scss',
+            'modulo/static/src/js/calendar_views.js',
+            'modulo/static/src/js/service_order_qr.js',
+        ],
+        'web.assets_frontend': [
+            'modulo/static/src/css/portal.scss',
+        ],
+        'web.assets_qweb': [
+            'modulo/static/src/xml/service_order_qr.xml',
+            'modulo/static/src/xml/calendar_templates.xml',
+        ],
+    },
     'demo': ['demo/demo_data.xml'],
+    'test': [
+        'tests/test_service_order.py',
+        'tests/test_service_equipment.py',
+        'tests/test_business_rules.py',
+        'tests/test_integrations.py',
+        'tests/test_service_workflows.py',
+        'tests/test_ui.py',
+        'tests/test_performance.py',
+    ],
     'installable': True,
     'application': True,
     'auto_install': False,
@@ -41,4 +64,26 @@
     'development_status': 'Beta',
     'price': 0,
     'currency': 'EUR',
+    'images': ['static/description/icon.png'],
+    'description': '''
+This module provides a complete service order management system for technical services companies.
+
+Features:
+    * Service order creation and management
+    * Equipment tracking and maintenance history
+    * Technician scheduling and assignment
+    * Customer portal for service tracking
+    * QR code generation for equipment and service orders
+    * Integration with accounting, inventory and HR modules
+    * Comprehensive reporting system
+    * Mobile-friendly interface
+
+This module is ideal for companies that provide technical services such as:
+    * HVAC maintenance
+    * Electrical services
+    * Plumbing services
+    * Appliance repair
+    * IT support services
+    * Facility management
+    ''',
 }

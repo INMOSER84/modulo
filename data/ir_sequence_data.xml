@@ -8,8 +8,12 @@
             <field name="prefix">SO/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range" eval="False"/>
         </record>
-        
+
         <!-- Secuencia para equipos -->
         <record id="sequence_service_equipment" model="ir.sequence">
             <field name="name">Service Equipment</field>
@@ -17,6 +21,36 @@
             <field name="prefix">EQ/</field>
             <field name="padding">5</field>
             <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range" eval="False"/>
+        </record>
+
+        <!-- Secuencia para certificados de servicio -->
+        <record id="sequence_service_certificate" model="ir.sequence">
+            <field name="name">Service Certificate</field>
+            <field name="code">service.certificate</field>
+            <field name="prefix">SC/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range" eval="False"/>
+        </record>
+
+        <!-- Secuencia para reportes de servicio -->
+        <record id="sequence_service_report" model="ir.sequence">
+            <field name="name">Service Report</field>
+            <field name="code">service.report</field>
+            <field name="prefix">SR/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+            <field name="implementation">standard</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range" eval="False"/>
         </record>
     </data>
 </odoo>

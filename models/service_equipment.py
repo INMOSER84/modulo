@@ -1,12 +1,15 @@
 from odoo import models, fields, api, _
 from datetime import datetime, timedelta
+import logging
+
+_logger = logging.getLogger(__name__)
 
 class ServiceEquipment(models.Model):
     _name = 'service.equipment'
     _description = 'Service Equipment'
     _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
-    
+
     name = fields.Char(string='Equipment Name', required=True, tracking=True)
     serial_number = fields.Char(string='Serial Number', tracking=True)
     model = fields.Char(string='Model')
@@ -22,49 +25,53 @@ class ServiceEquipment(models.Model):
     last_service_date = fields.Datetime(string='Last Service Date')
     next_service_date = fields.Datetime(string='Next Service Date')
     service_interval = fields.Integer(string='Service Interval (days)', default=365)
-    qr_code = fields.Binary(string='QR Code', compute='_generate_qr_code')
-    
+    qr_code = fields.Binary(string='QR Code', compute='_generate_qr_code', store=True)
+
     @api.model
     def create(self, vals):
         equipment = super().create(vals)
-        
+
         # Schedule first service if interval is set
         if vals.get('service_interval'):
             next_service = fields.Datetime.now() + timedelta(days=vals.get('service_interval'))
             equipment.write({'next_service_date': next_service})
-        
+
         return equipment
-    
+
     @api.depends('name', 'serial_number', 'partner_id')
     def _generate_qr_code(self):
         for equipment in self:
             try:
                 import qrcode
+                from qrcode import constants
                 import io
                 import base64
-                
+
                 qr_data = f"{equipment.name}|{equipment.serial_number}|{equipment.partner_id.name}"
                 qr = qrcode.QRCode(
                     version=1,
-                    error_correction=qrcode.constants.ERROR_CORRECT_L,
+                    error_correction=constants.ERROR_CORRECT_L,
                     box_size=10,
                     border=4,
                 )
                 qr.add_data(qr_data)
                 qr.make(fit=True)
-                
+
                 img = qr.make_image(fill_color="black", back_color="white")
-                
+
                 # Convert to base64
                 buffer = io.BytesIO()
                 img.save(buffer, format="PNG")
                 img_str = base64.b64encode(buffer.getvalue())
-                
+
                 equipment.qr_code = img_str
-            except Exception as e:
-                # Si hay un error, no generamos el código QR
+            except ImportError:
+                _logger.warning("qrcode library not found. Please install it: pip install qrcode[pil]")
                 equipment.qr_code = False
-    
+            except Exception as e:
+                _logger.error("Error generating QR code: %s", str(e))
+                equipment.qr_code = False
+
     def action_schedule_service(self):
         self.ensure_one()
         return {
@@ -77,7 +84,7 @@ class ServiceEquipment(models.Model):
                 'default_partner_id': self.partner_id.id,
             },
         }
-    
+
     def action_view_service_history(self):
         self.ensure_one()
         return {
@@ -88,29 +95,29 @@ class ServiceEquipment(models.Model):
             'domain': [('equipment_id', '=', self.id)],
             'context': {'default_equipment_id': self.id},
         }
-    
+
     def action_print_equipment_history(self):
         self.ensure_one()
-        return self.env.ref('inmoser_service_order.action_report_equipment_history').report_action(self)
-    
+        return self.env.ref('modulo.action_report_equipment_history').report_action(self)
+
     def _check_warranty_expiration(self):
         """Check for equipment with expiring warranty"""
         today = fields.Date.today()
         warning_date = today + timedelta(days=30)  # Warn 30 days before expiration
-        
+
         expiring_equipment = self.search([
             ('warranty_end', '<=', warning_date),
             ('warranty_end', '>=', today),
             ('active', '=', True)
         ])
-        
+
         for equipment in expiring_equipment:
             # Send notification to owner
             if equipment.partner_id.email:
-                template = self.env.ref('inmoser_service_order.email_template_warranty_expiration')
+                template = self.env.ref('modulo.email_template_warranty_expiration')
                 if template:
                     template.send_mail(equipment.id)
-            
+
             # Create activity for responsible person
             self.env['mail.activity'].create({
                 'res_id': equipment.id,
