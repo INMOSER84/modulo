@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Vista de mapa para órdenes de servicio -->
+        <record id="view_service_order_map" model="ir.ui.view">
+            <field name="name">service.order.map</field>
+            <field name="model">service.order</field>
+            <field name="arch" type="xml">
+                <map string="Service Orders" res_partner="partner_id">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="technician_id"/>
+                    <field name="state"/>
+                    <field name="date_order"/>
+                    <templates>
+                        <t t-name="map-popup">
+                            <div class="o_map_popup">
+                                <strong><t t-esc="record.name"/></strong>
+                                <div><t t-esc="record.partner_id"/></div>
+                                <div>Technician: <t t-esc="record.technician_id"/></div>
+                                <div>Status: <t t-esc="record.state"/></div>
+                                <div>Date: <t t-esc="record.date_order"/></div>
+                            </div>
+                        </t>
+                    </templates>
+                </map>
+            </field>
+        </record>
+    </data>
+</odoo>

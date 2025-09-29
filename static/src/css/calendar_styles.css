@@ -1,0 +1,133 @@
+/* Estilos personalizados para el calendario de órdenes de servicio */
+.o_calendar_box {
+    border-radius: 3px;
+    overflow: hidden;
+    border-left: 3px solid;
+}
+
+.o_calendar_color_strip {
+    height: 3px;
+}
+
+.o_calendar_title {
+    font-weight: bold;
+    padding: 2px 4px;
+}
+
+.o_calendar_subtitle {
+    font-size: 0.9em;
+    padding: 0 4px;
+}
+
+.o_calendar_info {
+    font-size: 0.8em;
+    padding: 0 4px 2px;
+}
+
+.o_calendar_info span {
+    margin-right: 5px;
+}
+
+/* Estilos para eventos según estado */
+.o_event_pending {
+    background-color: #fff3cd !important;
+    border-color: #ffeeba !important;
+}
+
+.o_event_in_progress {
+    background-color: #d1ecf1 !important;
+    border-color: #bee5eb !important;
+}
+
+.o_event_scheduled {
+    background-color: #d4edda !important;
+    border-color: #c3e6cb !important;
+}
+
+/* Estilos para tooltips */
+.o_calendar_tooltip {
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    font-size: 12px;
+    max-width: 250px;
+}
+
+.o_calendar_tooltip .o_tooltip_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 3px;
+}
+
+.o_calendar_tooltip .o_tooltip_row {
+    margin: 3px 0;
+}
+
+.o_calendar_tooltip .o_tooltip_label {
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+}
+
+/* Estilos para popovers */
+.o_calendar_popover {
+    min-width: 250px;
+}
+
+.o_calendar_popover .o_popover_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.o_calendar_popover .o_popover_row {
+    margin: 5px 0;
+}
+
+.o_calendar_popover .o_popover_label {
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+}
+
+.o_calendar_popover .o_popover_footer {
+    margin-top: 10px;
+    text-align: right;
+}
+
+/* Estilos para eventos de calendario */
+.o_service_order_event {
+    border-radius: 3px;
+    padding: 2px 5px;
+    margin-bottom: 1px;
+    font-size: 0.85em;
+}
+
+.o_service_order_event .o_event_time {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.o_service_order_event .o_event_title {
+    font-weight: bold;
+}
+
+.o_service_order_event .o_event_details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.o_service_order_event .o_event_details span {
+    margin-right: 5px;
+    margin-bottom: 2px;
+}
+
+.o_service_order_event .o_event_details .fa {
+    margin-right: 2px;
+}

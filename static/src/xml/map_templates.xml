@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="map-popup" owl="1">
+        <div class="o_map_popup">
+            <strong><t t-esc="record.name"/></strong>
+            <div><t t-esc="record.partner_id"/></div>
+            <div>Technician: <t t-esc="record.technician_id"/></div>
+            <div>Status: <t t-esc="record.state"/></div>
+            <div>Date: <t t-esc="record.date_order"/></div>
+        </div>
+    </t>
+</templates>
