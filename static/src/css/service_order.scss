@@ -1,0 +1,342 @@
+// Variables para colores y espaciado
+ $border-color: #e0e0e0;
+ $bg-light: #f8f9fa;
+ $primary-color: #007bff;
+ $primary-hover: #0069d9;
+ $spacing-base: 15px;
+ $spacing-small: 5px;
+ $spacing-medium: 10px;
+ $font-size-base: 16px;
+ $font-size-small: 12px;
+ $font-size-medium: 14px;
+ $font-weight-medium: 500;
+
+// Formulario de Orden de Servicio
+.o_service_order_form {
+    .o_service_order_qr {
+        text-align: center;
+        margin-bottom: $spacing-base;
+
+        .o_qr_code_image {
+            max-width: 150px;
+            height: auto;
+            border: 1px solid $border-color;
+            border-radius: 4px;
+            padding: $spacing-small;
+        }
+
+        .o_qr_code_button {
+            margin-top: $spacing-medium;
+        }
+    }
+
+    .o_service_order_refaction_lines {
+        .o_list_view {
+            .o_data_cell {
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .o_service_order_status {
+        .badge {
+            font-size: $font-size-medium;
+            padding: 6px 10px;
+        }
+    }
+}
+
+// Vista Kanban de Orden de Servicio
+.o_service_order_kanban {
+    .o_kanban_record {
+        .o_kanban_record_top {
+            .o_kanban_record_title {
+                font-weight: $font-weight-medium;
+                font-size: $font-size-base;
+            }
+        }
+
+        .o_kanban_tags {
+            margin-top: $spacing-medium;
+
+            .badge {
+                margin-right: $spacing-small;
+                font-size: $font-size-small;
+            }
+        }
+
+        .o_kanban_footer {
+            margin-top: $spacing-base;
+            padding-top: $spacing-medium;
+            border-top: 1px solid $border-color;
+
+            .oe_kanban_bottom_right {
+                .btn {
+                    padding: 4px 8px;
+                    font-size: $font-size-small;
+                }
+            }
+        }
+    }
+}
+
+// Vista Calendario de Orden de Servicio
+.o_service_order_calendar {
+    .o_calendar_view {
+        .o_calendar_container {
+            .o_calendar_sidebar {
+                .o_calendar_filter {
+                    .o_calendar_filter_section {
+                        margin-bottom: $spacing-base;
+
+                        h5 {
+                            font-size: $font-size-small;
+                            font-weight: $font-weight-medium;
+                            margin-bottom: $spacing-medium;
+                        }
+
+                        .o_calendar_filter_items {
+                            .o_calendar_filter_item {
+                                margin-bottom: $spacing-small;
+
+                                input[type="checkbox"] {
+                                    margin-right: $spacing-small;
+                                }
+
+                                label {
+                                    font-weight: normal;
+                                    margin-bottom: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .o_calendar_content {
+                .o_calendar_header {
+                    .o_calendar_navigation {
+                        .o_calendar_button_prev,
+                        .o_calendar_button_next {
+                            background-color: transparent;
+                            border: 1px solid $border-color;
+                            padding: 6px 12px;
+                            border-radius: 4px;
+
+                            &:hover {
+                                background-color: $bg-light;
+                            }
+                        }
+
+                        .o_calendar_title {
+                            font-size: 18px;
+                            font-weight: $font-weight-medium;
+                        }
+
+                        .o_calendar_button_today {
+                            background-color: $primary-color;
+                            color: white;
+                            border: none;
+                            padding: 6px 12px;
+                            border-radius: 4px;
+
+                            &:hover {
+                                background-color: $primary-hover;
+                            }
+                        }
+                    }
+
+                    .o_calendar_view_mode {
+                        .btn {
+                            background-color: transparent;
+                            border: 1px solid $border-color;
+                            padding: 6px 12px;
+                            border-radius: 4px;
+                            margin-right: $spacing-small;
+
+                            &:hover {
+                                background-color: $bg-light;
+                            }
+
+                            &.active {
+                                background-color: $primary-color;
+                                color: white;
+                                border-color: $primary-color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Estilos para eventos de calendario
+.o_service_order_event {
+    &.o_event_pending {
+        background-color: rgba(255, 193, 7, 0.2);
+        border-left: 3px solid #ffc107;
+    }
+    
+    &.o_event_in_progress {
+        background-color: rgba(0, 123, 255, 0.2);
+        border-left: 3px solid #007bff;
+    }
+    
+    &.o_event_scheduled {
+        background-color: rgba(40, 167, 69, 0.2);
+        border-left: 3px solid #28a745;
+    }
+    
+    .o_event_time {
+        font-size: 12px;
+        color: #6c757d;
+    }
+    
+    .o_event_title {
+        font-weight: $font-weight-medium;
+        margin-bottom: 5px;
+    }
+    
+    .o_event_details {
+        font-size: 12px;
+        
+        span {
+            margin-right: 8px;
+            display: inline-block;
+            
+            i {
+                margin-right: 3px;
+            }
+        }
+    }
+}
+
+// Estilos para tooltip de calendario
+.o_calendar_tooltip {
+    .o_tooltip_header {
+        margin-bottom: 8px;
+        
+        strong {
+            margin-right: 8px;
+        }
+    }
+    
+    .o_tooltip_row {
+        margin-bottom: 5px;
+        
+        .o_tooltip_label {
+            font-weight: $font-weight-medium;
+            margin-right: 8px;
+            min-width: 80px;
+            display: inline-block;
+        }
+    }
+}
+
+// Estilos para mapa
+.o_service_order_map {
+    .o_map_popup {
+        padding: 10px;
+        
+        strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        div {
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+    }
+}
+
+// Estilos para QR Code
+.o_service_order_qr {
+    .o_qr_code_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        
+        .o_qr_code_image {
+            margin-bottom: 10px;
+        }
+        
+        .o_qr_code_info {
+            text-align: center;
+            
+            .o_qr_code_title {
+                font-weight: $font-weight-medium;
+                margin-bottom: 5px;
+            }
+            
+            .o_qr_code_description {
+                font-size: $font-size-small;
+                color: #6c757d;
+            }
+        }
+    }
+}
+
+// Estilos responsivos
+@media (max-width: 768px) {
+    .o_service_order_form {
+        .o_service_order_qr {
+            .o_qr_code_image {
+                max-width: 100px;
+            }
+        }
+    }
+
+    .o_service_order_kanban {
+        .o_kanban_record {
+            .o_kanban_footer {
+                .oe_kanban_bottom_right {
+                    .btn {
+                        padding: 6px 10px;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    .o_service_order_calendar {
+        .o_calendar_view {
+            .o_calendar_container {
+                .o_calendar_content {
+                    .o_calendar_header {
+                        .o_calendar_navigation {
+                            .o_calendar_button_prev,
+                            .o_calendar_button_next,
+                            .o_calendar_button_today {
+                                padding: 4px 8px;
+                                font-size: 12px;
+                            }
+
+                            .o_calendar_title {
+                                font-size: 16px;
+                            }
+                        }
+
+                        .o_calendar_view_mode {
+                            .btn {
+                                padding: 4px 8px;
+                                font-size: 12px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    .o_service_order_event {
+        .o_event_details {
+            span {
+                display: block;
+                margin-bottom: 3px;
+            }
+        }
+    }
+}

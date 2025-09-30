@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Plantilla de reporte para historial de equipo -->
+        <template id="report_equipment_history_document">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center">
+                            <h2>Equipment History Report</h2>
+                            <h3 t-field="doc.name"/>
+                        </div>
+                        
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Serial Number:</strong></div>
+                                    <div class="col-8"><span t-field="doc.serial_number"/></div>
+                                </div>
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Model:</strong></div>
+                                    <div class="col-8"><span t-field="doc.model"/></div>
+                                </div>
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Manufacturer:</strong></div>
+                                    <div class="col-8"><span t-field="doc.manufacturer"/></div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Owner:</strong></div>
+                                    <div class="col-8"><span t-field="doc.partner_id.name"/></div>
+                                </div>
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Location:</strong></div>
+                                    <div class="col-8"><span t-field="doc.location"/></div>
+                                </div>
+                                <div class="row mb16">
+                                    <div class="col-4"><strong>Report Date:</strong></div>
+                                    <div class="col-8"><t t-esc="datetime.datetime.now().strftime('%Y-%m-%d')"/></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb16">
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Warranty Information</h5>
+                                        <p class="card-text">
+                                            <strong>Start Date:</strong> <span t-field="doc.warranty_start"/><br/>
+                                            <strong>End Date:</strong> <span t-field="doc.warranty_end"/><br/>
+                                            <strong>Status:</strong> 
+                                            <t t-if="doc.warranty_end and doc.warranty_end >= datetime.datetime.now().strftime('%Y-%m-%d')">
+                                                <span class="badge badge-success">Active</span>
+                                            </t>
+                                            <t t-else="">
+                                                <span class="badge badge-danger">Expired</span>
+                                            </t>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Service Information</h5>
+                                        <p class="card-text">
+                                            <strong>Service Interval:</strong> <span t-field="doc.service_interval"/> days<br/>
+                                            <strong>Last Service:</strong> <span t-field="doc.last_service_date"/><br/>
+                                            <strong>Next Service:</strong> <span t-field="doc.next_service_date"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Statistics</h5>
+                                        <p class="card-text">
+                                            <strong>Total Services:</strong> <span t-field="doc.service_order_count"/><br/>
+                                            <strong>Avg. Duration:</strong> <span t-esc="round(sum(doc.service_order_ids.mapped('duration')) / len(doc.service_order_ids), 2) if doc.service_order_ids else 0"/> hours<br/>
+                                            <strong>Last Status:</strong> <span t-field="doc.service_order_ids[:1].state"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="mt32">Service History</h3>
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Order Reference</th>
+                                    <th>Date</th>
+                                    <th>Service Type</th>
+                                    <th>Technician</th>
+                                    <th>Status</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.service_order_ids.sorted(key=lambda r: r.date_requested, reverse=True)" t-as="order">
+                                    <td><span t-field="order.name"/></td>
+                                    <td><span t-field="order.date_requested"/></td>
+                                    <td><span t-field="order.service_type_id.name"/></td>
+                                    <td><span t-field="order.technician_id.name"/></td>
+                                    <td>
+                                        <span class="badge" t-att-class="{
+                                            'bg-success': order.state == 'completed',
+                                            'bg-warning': order.state in ('scheduled', 'in_progress'),
+                                            'bg-info': order.state == 'draft',
+                                            'bg-danger': order.state == 'cancelled'
+                                        }">
+                                            <span t-field="order.state"/>
+                                        </span>
+                                    </td>
+                                    <td><span t-field="order.duration"/> hours</td>
+                                </tr>
+                                <t t-if="not doc.service_order_ids">
+                                    <tr>
+                                        <td colspan="6" class="text-center">No service history found</td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        
+                        <div class="row mt32">
+                            <div class="col-12 text-center">
+                                <small class="text-muted">Generated on <t t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/></small>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <!-- Acción de reporte -->
+        <record id="action_report_equipment_history" model="ir.actions.report">
+            <field name="name">Equipment History</field>
+            <field name="model">service.equipment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">modulo.report_equipment_history_document</field>
+            <field name="report_file">modulo.report_equipment_history_document</field>
+            <field name="binding_model_id" ref="model_service_equipment"/>
+            <field name="binding_type">report</field>
+            <field name="print_report_name">'Equipment History - %s' % (object.name)</field>
+        </record>
+    </data>
+</odoo>

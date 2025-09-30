@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de calendario para órdenes de servicio -->
+    <record id="view_service_order_calendar" model="ir.ui.view">
+        <field name="name">service.order.calendar</field>
+        <field name="model">service.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Service Orders" date_start="date_scheduled" color="state">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="technician_id"/>
+            </calendar>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================== VISTAS Y ACCIONES ===================== -->
+
+    <!-- Vista y acción de Órdenes de Servicio -->
+    <record id="view_service_order_tree" model="ir.ui.view">
+        <field name="name">service.order.tree</field>
+        <field name="model">service.order</field>
+        <field name="arch" type="xml">
+            <tree string="Service Orders">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="service_type_id"/>
+                <field name="technician_id"/>
+                <field name="date_scheduled"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_service_order_form" model="ir.ui.view">
+        <field name="name">service.order.form</field>
+        <field name="model">service.order</field>
+        <field name="arch" type="xml">
+            <form string="Service Order">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="partner_id"/>
+                        <field name="service_type_id"/>
+                        <field name="equipment_id"/>
+                        <field name="technician_id"/>
+                        <field name="date_requested"/>
+                        <field name="date_scheduled"/>
+                        <field name="state"/>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                            <field name="notes"/>
+                        </page>
+                        <page string="Refactions">
+                            <field name="refaction_line_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_service_order" model="ir.actions.act_window">
+        <field name="name">Service Orders</field>
+        <field name="res_model">service.order</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista y acción de Equipos -->
+    <record id="action_service_equipment" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">service.equipment</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista y acción de Tipos de Servicio -->
+    <record id="action_service_type" model="ir.actions.act_window">
+        <field name="name">Service Types</field>
+        <field name="res_model">service.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista de calendario -->
+    <record id="action_service_order_calendar" model="ir.actions.act_window">
+        <field name="name">Service Calendar</field>
+        <field name="res_model">service.order</field>
+        <field name="view_mode">calendar,tree,form</field>
+    </record>
+
+    <!-- ===================== MENÚS ===================== -->
+
+    <!-- Menú principal -->
+    <menuitem id="menu_service_root" name="Service Management" sequence="65"/>
+
+    <!-- Submenú de configuración -->
+    <menuitem id="menu_service_config" name="Configuration" parent="menu_service_root" sequence="100"/>
+
+    <!-- Menú de órdenes de servicio -->
+    <menuitem id="menu_service_order" name="Service Orders" parent="menu_service_root" action="action_service_order" sequence="10"/>
+
+    <!-- Menú de equipos -->
+    <menuitem id="menu_service_equipment" name="Equipment" parent="menu_service_root" action="action_service_equipment" sequence="20"/>
+
+    <!-- Menú de tipos de servicio -->
+    <menuitem id="menu_service_type" name="Service Types" parent="menu_service_config" action="action_service_type" sequence="10"/>
+
+    <!-- Menú de reportes -->
+    <menuitem id="menu_service_reports" name="Reports" parent="menu_service_root" sequence="90"/>
+
+    <!-- Submenús de reportes -->
+    <menuitem id="menu_service_order_reports" name="Service Orders" parent="menu_service_reports" sequence="10"/>
+    <menuitem id="menu_equipment_reports" name="Equipment" parent="menu_service_reports" sequence="20"/>
+    <menuitem id="menu_technician_reports" name="Technicians" parent="menu_service_reports" sequence="30"/>
+
+    <!-- Acciones de reportes (requieren definir reportes en reports/*.xml) -->
+    <menuitem id="menu_report_service_order" name="Service Order Report" parent="menu_service_order_reports" action="action_report_service_order" sequence="10"/>
+    <menuitem id="menu_report_service_certificate" name="Service Certificate" parent="menu_service_order_reports" action="action_report_service_certificate" sequence="20"/>
+    <menuitem id="menu_report_equipment_history" name="Equipment History" parent="menu_equipment_reports" action="action_report_equipment_history" sequence="10"/>
+    <menuitem id="menu_report_technician_performance" name="Technician Performance" parent="menu_technician_reports" action="action_report_technician_performance" sequence="10"/>
+
+    <!-- Vista de calendario -->
+    <menuitem id="menu_service_calendar" name="Service Calendar" parent="menu_service_root" action="action_service_order_calendar" sequence="30"/>
+</odoo>

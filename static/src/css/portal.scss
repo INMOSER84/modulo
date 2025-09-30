@@ -1,0 +1,99 @@
+// Variables para colores y espaciado
+ $border-color: #e0e0e0;
+ $bg-light: #f8f9fa;
+ $spacing-base: 15px;
+ $spacing-small: 5px;
+ $font-size-base: 16px;
+ $font-weight-medium: 500;
+
+.o_portal_my_home {
+    .o_service_order_card {
+        border: 1px solid $border-color;
+        border-radius: 4px;
+        margin-bottom: $spacing-base;
+
+        .card-header {
+            background-color: $bg-light;
+            border-bottom: 1px solid $border-color;
+            padding: 10px 15px;
+
+            .card-title {
+                margin: 0;
+                font-size: $font-size-base;
+                font-weight: $font-weight-medium;
+            }
+        }
+
+        .card-body {
+            padding: $spacing-base;
+
+            .o_service_order_info {
+                margin-bottom: 10px;
+
+                .info-label {
+                    font-weight: $font-weight-medium;
+                    margin-right: $spacing-small;
+                }
+            }
+
+            .o_service_order_actions {
+                margin-top: $spacing-base;
+
+                .btn {
+                    margin-right: $spacing-small;
+                }
+            }
+        }
+    }
+
+    .o_service_order_table {
+        .table {
+            margin-bottom: 0;
+
+            th {
+                background-color: $bg-light;
+                border-top: none;
+                font-weight: $font-weight-medium;
+            }
+
+            td {
+                vertical-align: middle;
+            }
+
+            .badge {
+                font-size: 12px;
+                padding: 4px 8px;
+            }
+        }
+    }
+    
+    // Estilos responsivos
+    @media (max-width: 768px) {
+        .o_service_order_card {
+            .card-body {
+                padding: 10px;
+            }
+            
+            .o_service_order_actions {
+                .btn {
+                    display: block;
+                    width: 100%;
+                    margin-bottom: 5px;
+                    
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+        
+        .o_service_order_table {
+            .table {
+                th, td {
+                    padding: 5px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}

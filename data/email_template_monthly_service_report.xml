@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <!-- Plantilla de correo para reporte mensual de servicios -->
+    <record id="email_template_monthly_service_report_modulo" model="mail.template">
+      <field name="name">Monthly Service Report</field>
+      <field name="model_id" ref="model_service_order"/>
+      <field name="subject">Monthly Service Report - ${ctx.get('report_month', datetime.date.today().strftime('%B %Y'))}</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p>Dear Manager,</p>
+          <p>Please find attached the monthly service report for 
+             <strong>${ctx.get('report_month', datetime.date.today().strftime('%B %Y'))}</strong>.
+          </p>
+          <p><strong>Report Summary:</strong></p>
+          <ul>
+            <li>Total Service Orders: ${ctx.get('total_orders', 0)}</li>
+            <li>Completed Orders: ${ctx.get('completed_orders', 0)}</li>
+            <li>Average Duration: ${ctx.get('average_duration', 0)} hours</li>
+            <li>Total Revenue: ${ctx.get('total_revenue', 0)}</li>
+          </ul>
+          <p>For detailed information, please refer to the attached report.</p>
+          <p>Thank you,</p>
+          <p>${user.company_id.name}</p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+      <field name="lang">${user.partner_id.lang}</field>
+      <field name="email_to">${user.company_id.email}</field>
+      <!-- ⚠️ Si aún no tienes definido el reporte, deja comentadas estas líneas -->
+      <!-- <field name="report_template" ref="report_monthly_service"/> -->
+      <!-- <field name="report_name">Monthly_Service_Report_${ctx.get('report_month', datetime.date.today().strftime('%Y_%m'))}.pdf</field> -->
+    </record>
+  </data>
+</odoo>

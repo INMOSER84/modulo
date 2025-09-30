@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Plantilla para vista de calendario de órdenes de servicio -->
+    <t t-name="calendar-box" owl="1">
+        <div class="o_calendar_box">
+            <div class="o_calendar_color_strip" t-att-style="'background-color: ' + record.color"/>
+            <div class="o_calendar_title">
+                <t t-esc="record.name"/>
+            </div>
+            <div class="o_calendar_subtitle">
+                <t t-esc="record.partner_id and record.partner_id[1]"/>
+            </div>
+            <div class="o_calendar_info">
+                <span t-if="record.service_type_id">
+                    <t t-esc="record.service_type_id[1]"/>
+                </span>
+                <span t-if="record.technician_id">
+                    <t t-esc="record.technician_id[1]"/>
+                </span>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="calendar-popover" owl="1">
+        <div class="o_calendar_popover">
+            <div class="o_calendar_title">
+                <strong><t t-esc="record.name"/></strong>
+            </div>
+            <div class="o_calendar_content">
+                <div><t t-esc="record.partner_id and record.partner_id[1]"/></div>
+                <div>Type: <t t-esc="record.service_type_id and record.service_type_id[1]"/></div>
+                <div>Technician: <t t-esc="record.technician_id and record.technician_id[1]"/></div>
+                <div>Equipment: <t t-esc="record.equipment_id and record.equipment_id[1]"/></div>
+                <div>Status: <t t-esc="record.state"/></div>
+                <div>Priority: <t t-esc="record.priority"/></div>
+                <div>Scheduled: <t t-esc="record.date_scheduled"/></div>
+                <div>Completed: <t t-esc="record.date_completed"/></div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para evento de calendario -->
+    <t t-name="calendar-event" owl="1">
+        <div class="o_service_order_event" t-att-class="event_class + ' o_event_' + event.state">
+            <div class="o_event_time">
+                <span class="o_event_start_time"><t t-esc="format_time(event.start)"/></span>
+                <span>-</span>
+                <span class="o_event_end_time"><t t-esc="format_time(event.end)"/></span>
+            </div>
+            <div class="o_event_content">
+                <div class="o_event_title"><t t-esc="event.title"/></div>
+                <div class="o_event_details">
+                    <span class="o_event_partner" t-if="event.partner_name">
+                        <i class="fa fa-user"/> <t t-esc="event.partner_name"/>
+                    </span>
+                    <span class="o_event_technician" t-if="event.technician_name">
+                        <i class="fa fa-wrench"/> <t t-esc="event.technician_name"/>
+                    </span>
+                    <span class="o_event_service_type" t-if="event.service_type">
+                        <i class="fa fa-cogs"/> <t t-esc="event.service_type"/>
+                    </span>
+                    <span class="o_event_state badge" t-att-class="'badge-' + (event.state_color or 'secondary')">
+                        <t t-esc="event.state_label"/>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para tooltip de evento -->
+    <t t-name="calendar-event-tooltip" owl="1">
+        <div class="o_calendar_tooltip">
+            <div class="o_tooltip_header">
+                <strong><t t-esc="event.title"/></strong>
+                <span class="badge" t-att-class="'badge-' + (event.state_color or 'secondary')">
+                    <t t-esc="event.state_label"/>
+                </span>
+            </div>
+            <div class="o_tooltip_body">
+                <div class="o_tooltip_row">
+                    <span class="o_tooltip_label">Date:</span>
+                    <span class="o_tooltip_value"><t t-esc="format_date(event.start)"/></span>
+                </div>
+                <div class="o_tooltip_row">
+                    <span class="o_tooltip_label">Time:</span>
+                    <span class="o_tooltip_value">
+                        <t t-esc="format_time(event.start)"/> - <t t-esc="format_time(event.end)"/>
+                    </span>
+                </div>
+                <div class="o_tooltip_row" t-if="event.partner_name">
+                    <span class="o_tooltip_label">Customer:</span>
+                    <span class="o_tooltip_value"><t t-esc="event.partner_name"/></span>
+                </div>
+                <div class="o_tooltip_row" t-if="event.technician_name">
+                    <span class="o_tooltip_label">Technician:</span>
+                    <span class="o_tooltip_value"><t t-esc="event.technician_name"/></span>
+                </div>
+                <div class="o_tooltip_row" t-if="event.service_type">
+                    <span class="o_tooltip_label">Service Type:</span>
+                    <span class="o_tooltip_value"><t t-esc="event.service_type"/></span>
+                </div>
+                <div class="o_tooltip_row" t-if="event.location">
+                    <span class="o_tooltip_label">Location:</span>
+                    <span class="o_tooltip_value"><t t-esc="event.location"/></span>
+                </div>
+                <div class="o_tooltip_row" t-if="event.description">
+                    <span class="o_tooltip_label">Description:</span>
+                    <span class="o_tooltip_value"><t t-esc="event.description"/></span>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para popover de evento -->
+    <t t-name="calendar-event-popover" owl="1">
+        <div class="o_calendar_popover">
+            <div class="o_popover_header">
+                <h4><t t-esc="event.title"/></h4>
+                <span class="badge" t-att-class="'badge-' + (event.state_color or 'secondary')">
+                    <t t-esc="event.state_label"/>
+                </span>
+            </div>
+            <div class="o_popover_body">
+                <div class="o_popover_row">
+                    <span class="o_popover_label">Date:</span>
+                    <span class="o_popover_value"><t t-esc="format_date(event.start)"/></span>
+                </div>
+                <div class="o_popover_row">
+                    <span class="o_popover_label">Time:</span>
+                    <span class="o_popover_value">
+                        <t t-esc="format_time(event.start)"/> - <t t-esc="format_time(event.end)"/>
+                    </span>
+                </div>
+                <div class="o_popover_row" t-if="event.partner_name">
+                    <span class="o_popover_label">Customer:</span>
+                    <span class="o_popover_value"><t t-esc="event.partner_name"/></span>
+                </div>
+                <div class="o_popover_row" t-if="event.technician_name">
+                    <span class="o_popover_label">Technician:</span>
+                    <span class="o_popover_value"><t t-esc="event.technician_name"/></span>
+                </div>
+                <div class="o_popover_row" t-if="event.service_type">
+                    <span class="o_popover_label">Service Type:</span>
+                    <span class="o_popover_value"><t t-esc="event.service_type"/></span>
+                </div>
+                <div class="o_popover_row" t-if="event.location">
+                    <span class="o_popover_label">Location:</span>
+                    <span class="o_popover_value"><t t-esc="event.location"/></span>
+                </div>
+                <div class="o_popover_row" t-if="event.description">
+                    <span class="o_popover_label">Description:</span>
+                    <span class="o_popover_value"><t t-esc="event.description"/></span>
+                </div>
+            </div>
+            <div class="o_popover_footer">
+                <button class="btn btn-primary btn-sm o_popover_edit">
+                    <i class="fa fa-pencil"/> Edit
+                </button>
+                <button class="btn btn-secondary btn-sm o_popover_close">
+                    Close
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

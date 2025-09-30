@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <!-- Plantilla para mostrar código QR en la vista de formulario -->
+    <t t-name="service_order_qr_code" owl="1">
+        <div class="o_service_order_qr">
+            <div class="o_qr_code_container">
+                <img t-att-src="qr_code_image" alt="QR Code" class="o_qr_code_image"/>
+                <div class="o_qr_code_info">
+                    <div class="o_qr_code_title">Service Order QR Code</div>
+                    <div class="o_qr_code_description">
+                        Scan this QR code to access service order details
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para modal de detalles de QR -->
+    <t t-name="service_order_qr_modal" owl="1">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="o_qr_modal_header">
+                        <h3><t t-esc="service_order_name"/></h3>
+                        <p class="text-muted"><t t-esc="customer_name"/></p>
+                        <span class="badge" t-att-class="'badge-' + state_color">
+                            <t t-esc="state"/>
+                        </span>
+                    </div>
+                    <div class="o_qr_modal_body mt-3">
+                        <img t-att-src="qr_code_image" alt="QR Code" class="o_qr_code_image img-fluid"/>
+                    </div>
+                    <div class="o_qr_modal_details mt-3">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Service Type:</strong> <t t-esc="service_type_name or 'N/A'"/></p>
+                                <p><strong>Technician:</strong> <t t-esc="technician_name or 'N/A'"/></p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><strong>Scheduled Date:</strong> <t t-esc="scheduled_date or 'N/A'"/></p>
+                                <p><strong>Location:</strong> <t t-esc="location or 'N/A'"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para botón de código QR -->
+    <t t-name="service_order_qr_button" owl="1">
+        <button type="button" class="btn btn-secondary o_service_order_qr_button" 
+                t-att-data-order-id="order_id" title="Show QR Code">
+            <i class="fa fa-qrcode"/> Show QR Code
+        </button>
+    </t>
+
+    <!-- Plantilla para impresión de código QR -->
+    <t t-name="service_order_qr_print" owl="1">
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>Service Order QR Code - <t t-esc="service_order_name"/></title>
+                <meta charset="utf-8"/>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        text-align: center;
+                        padding: 20px;
+                    }
+                    .header {
+                        margin-bottom: 20px;
+                        border-bottom: 1px solid #eee;
+                        padding-bottom: 10px;
+                    }
+                    .content {
+                        margin: 20px 0;
+                    }
+                    .qr-container {
+                        margin: 20px auto;
+                        width: 200px;
+                    }
+                    .details {
+                        margin-top: 30px;
+                        text-align: left;
+                        max-width: 400px;
+                        margin: 30px auto;
+                    }
+                    .details-row {
+                        margin-bottom: 8px;
+                    }
+                    .details-label {
+                        font-weight: bold;
+                        display: inline-block;
+                        width: 150px;
+                    }
+                    .footer {
+                        margin-top: 40px;
+                        font-size: 12px;
+                        color: #888;
+                    }
+                    @media print {
+                        body {
+                            padding: 0;
+                        }
+                        .no-print {
+                            display: none;
+                        }
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1>Service Order QR Code</h1>
+                </div>
+                <div class="content">
+                    <div class="qr-container">
+                        <img t-att-src="qr_code_image" alt="QR Code" style="max-width: 100%;"/>
+                    </div>
+                    <div class="details">
+                        <div class="details-row">
+                            <span class="details-label">Service Order:</span>
+                            <span><t t-esc="service_order_name"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Customer:</span>
+                            <span><t t-esc="customer_name"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Service Type:</span>
+                            <span><t t-esc="service_type_name or 'N/A'"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Technician:</span>
+                            <span><t t-esc="technician_name or 'N/A'"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Scheduled Date:</span>
+                            <span><t t-esc="scheduled_date or 'N/A'"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Location:</span>
+                            <span><t t-esc="location or 'N/A'"/></span>
+                        </div>
+                        <div class="details-row">
+                            <span class="details-label">Status:</span>
+                            <span><t t-esc="state"/></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">
+                    <p>Generated on <t t-esc="current_date"/></p>
+                    <p class="no-print">
+                        <button onclick="window.print()" class="btn btn-primary">Print</button>
+                        <button onclick="window.close()" class="btn btn-secondary">Close</button>
+                    </p>
+                </div>
+            </body>
+        </html>
+    </t>
+
+    <!-- Plantilla para código QR en el portal del cliente -->
+    <t t-name="service_order_portal_qr" owl="1">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h4 class="card-title mb-0">Service Order QR Code</h4>
+            </div>
+            <div class="card-body text-center">
+                <img t-att-src="qr_code_image" alt="QR Code" class="img-fluid mb-3" style="max-width: 200px;"/>
+                <p class="card-text">Scan this QR code for quick access to your service order details</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-primary btn-sm o_portal_download_qr">
+                        <i class="fa fa-download"/> Download
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-sm o_portal_print_qr">
+                        <i class="fa fa-print"/> Print
+                    </button>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Plantilla para código QR en vista kanban -->
+    <t t-name="service_order_kanban_qr" owl="1">
+        <div class="o_kanban_qr_container">
+            <img t-att-src="qr_code_image" alt="QR Code" class="o_kanban_qr_image"/>
+            <div class="o_kanban_qr_actions">
+                <button type="button" class="btn btn-sm btn-secondary o_kanban_show_qr" 
+                        t-att-data-order-id="order_id" title="Show QR Code">
+                    <i class="fa fa-qrcode"/>
+                </button>
+            </div>
+        </div>
+    </t>
+</templates>

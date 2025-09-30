@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <!-- ========================================================== -->
+    <!-- 1. CLIENTES DE DEMOSTRACIÓN (Residencial / Comercial)     -->
+    <!-- ========================================================== -->
+    <record id="demo_customer_1" model="res.partner">
+      <field name="name">Residencial Los Pinos</field>
+      <field name="is_company">False</field>
+      <field name="phone">+52 55 1234 5678</field>
+      <field name="mobile">+52 55 9876 5432</field>
+      <field name="email">j.garcia@lospinos.mx</field>
+      <field name="street">Calle Pinos 234, Casa 12</field>
+      <field name="city">Tlalnepantla</field>
+      <field name="zip">54060</field>
+      <field name="is_service_customer" eval="True"/>
+      <field name="service_customer_type">residential</field>
+      <field name="service_preference">phone</field>
+      <field name="service_contact">José García</field>
+      <field name="service_phone">+52 55 1234 5678</field>
+      <field name="service_email">j.garcia@lospinos.mx</field>
+    </record>
+    
+    <record id="demo_customer_2" model="res.partner">
+      <field name="name">Hotel Plaza Ejecutiva</field>
+      <field name="is_company">True</field>
+      <field name="phone">+52 33 2468 1357</field>
+      <field name="email">mantenimiento@hotelejecutiva.com</field>
+      <field name="street">Av. Javier Barros Sierra 456</field>
+      <field name="city">Zapopan</field>
+      <field name="zip">45110</field>
+      <field name="is_service_customer" eval="True"/>
+      <field name="service_customer_type">commercial</field>
+      <field name="service_preference">email</field>
+      <field name="service_contact">Carlos Mendoza</field>
+      <field name="service_phone">+52 33 2468 1357</field>
+      <field name="service_email">mantenimiento@hotelejecutiva.com</field>
+    </record>
+    
+    <record id="demo_customer_3" model="res.partner">
+      <field name="name">Restaurante El Sabor</field>
+      <field name="is_company">True</field>
+      <field name="phone">+52 81 3691 2580</field>
+      <field name="email">admin@elsabor.com</field>
+      <field name="street">Blvd. Bernardo Quintana 789</field>
+      <field name="city">Santiago de Querétaro</field>
+      <field name="zip">76140</field>
+      <field name="is_service_customer" eval="True"/>
+      <field name="service_customer_type">industrial</field>
+      <field name="service_preference">email</field>
+      <field name="service_contact">Laura Rodríguez</field>
+      <field name="service_phone">+52 81 3691 2580</field>
+      <field name="service_email">admin@elsabor.com</field>
+    </record>
+
+    <!-- ========================================================== -->
+    <!-- 2. TÉCNICOS ESPECIALIZADOS (HVAC / Línea Blanca)           -->
+    <!-- ========================================================== -->
+    <record id="demo_technician_user_1" model="res.users">
+      <field name="name">Luis Hernández</field>
+      <field name="login">luis.hernandez</field>
+      <field name="email">luis.hernandez@company.com</field>
+      <field name="groups_id" eval="[(6, 0, [ref('modulo.group_service_technician')])]"></field>
+    </record>
+    
+    <record id="demo_technician_1" model="hr.employee">
+      <field name="name">Luis Hernández</field>
+      <field name="user_id" ref="demo_technician_user_1"></field>
+      <field name="is_technician" eval="True"/>
+      <field name="technician_code">TECH001</field>
+      <field name="specialization">HVAC Systems</field>
+      <field name="certification">HVAC Certified Technician</field>
+      <field name="certification_date" eval="datetime.datetime.now() - datetime.timedelta(days=365)"/>
+      <field name="certification_expiry" eval="datetime.datetime.now() + datetime.timedelta(days=365)"/>
+      <field name="phone">+52 55 1111 2222</field>
+      <field name="work_email">luis.hernandez@company.com</field>
+    </record>
+    
+    <record id="demo_technician_user_2" model="res.users">
+      <field name="name">Marta Domínguez</field>
+      <field name="login">marta.dominguez</field>
+      <field name="email">marta.dominguez@company.com</field>
+      <field name="groups_id" eval="[(6, 0, [ref('modulo.group_service_technician')])]"></field>
+    </record>
+    
+    <record id="demo_technician_2" model="hr.employee">
+      <field name="name">Marta Domínguez</field>
+      <field name="user_id" ref="demo_technician_user_2"></field>
+      <field name="is_technician" eval="True"/>
+      <field name="technician_code">TECH002</field>
+      <field name="specialization">White Goods</field>
+      <field name="certification">Appliance Repair Technician</field>
+      <field name="certification_date" eval="datetime.datetime.now() - datetime.timedelta(days=180)"/>
+      <field name="certification_expiry" eval="datetime.datetime.now() + datetime.timedelta(days=180)"/>
+      <field name="phone">+52 33 3333 4444</field>
+      <field name="work_email">marta.dominguez@company.com</field>
+    </record>
+
+    <!-- ========================================================== -->
+    <!-- 3. EQUIPOS HVAC Y LÍNEA BLANCA                            -->
+    <!-- ========================================================== -->
+    <record id="demo_equipment_1" model="service.equipment">
+      <field name="name">Minisplit 18 000 BTU Sala</field>
+      <field name="partner_id" ref="demo_customer_1"></field>
+      <field name="serial_number">MSD-18-001234</field>
+      <field name="model">Mission 18K</field>
+      <field name="manufacturer">Midea</field>
+      <field name="location">Sala de estar - Piso 1</field>
+      <field name="purchase_date" eval="datetime.datetime.now() - datetime.timedelta(days=365)"/>
+      <field name="warranty_start" eval="datetime.datetime.now() - datetime.timedelta(days=365)"/>
+      <field name="warranty_end" eval="datetime.datetime.now() + datetime.timedelta(days=365)"/>
+      <field name="service_interval">90</field>
+      <field name="next_service_date" eval="datetime.datetime.now() + datetime.timedelta(days=30)"/>
+    </record>
+    
+    <record id="demo_equipment_2" model="service.equipment">
+      <field name="name">Refrigeradora Side-by-Side</field>
+      <field name="partner_id" ref="demo_customer_1"></field>
+      <field name="serial_number">WSF-ABC-5678</field>
+      <field name="model">WSF26D4EXY</field>
+      <field name="manufacturer">Whirlpool</field>
+      <field name="location">Cocina - Planta baja</field>
+      <field name="purchase_date" eval="datetime.datetime.now() - datetime.timedelta(days=730)"/>
+      <field name="warranty_start" eval="datetime.datetime.now() - datetime.timedelta(days=730)"/>
+      <field name="warranty_end" eval="datetime.datetime.now() - datetime.timedelta(days=30)"/>
+      <field name="service_interval">180</field>
+      <field name="next_service_date" eval="datetime.datetime.now() + datetime.timedelta(days=15)"/>
+    </record>
+    
+    <record id="demo_equipment_3" model="service.equipment">
+      <field name="name">Cámara Frigorífica 3 Puertas</field>
+      <field name="partner_id" ref="demo_customer_2"></field>
+      <field name="serial_number">HRG-HOTEL-001</field>
+      <field name="model">HRG-3P-1800</field>
+      <field name="manufacturer">Hoshizaki</field>
+      <field name="location">Cocina central - Hotel</field>
+      <field name="purchase_date" eval="datetime.datetime.now() - datetime.timedelta(days=180)"/>
+      <field name="warranty_start" eval="datetime.datetime.now() - datetime.timedelta(days=180)"/>
+      <field name="warranty_end" eval="datetime.datetime.now() + datetime.timedelta(days=545)"/>
+      <field name="service_interval">90</field>
+      <field name="next_service_date" eval="datetime.datetime.now() + datetime.timedelta(days=45)"/>
+    </record>
+    
+    <record id="demo_equipment_4" model="service.equipment">
+      <field name="name">Lavadora Industrial 25 kg</field>
+      <field name="partner_id" ref="demo_customer_3"></field>
+      <field name="serial_number">MAY-REST-002</field>
+      <field name="model">MFR25PD</field>
+      <field name="manufacturer">Maytag</field>
+      <field name="location">Área de lavandería - Restaurante</field>
+      <field name="purchase_date" eval="datetime.datetime.now() - datetime.timedelta(days=545)"/>
+      <field name="warranty_start" eval="datetime.datetime.now() - datetime.timedelta(days=545)"/>
+      <field name="warranty_end" eval="datetime.datetime.now() + datetime.timedelta(days=180)"/>
+      <field name="service_interval">60</field>
+      <field name="next_service_date" eval="datetime.datetime.now() + datetime.timedelta(days=20)"/>
+    </record>
+
+    <!-- ========================================================== -->
+    <!-- 4. PRODUCTOS DE REPUESTO (HVAC / Línea Blanca)             -->
+    <!-- ========================================================== -->
+    <record id="demo_product_1" model="product.product">
+      <field name="name">Filtro de Aire Minisplit 18K</field>
+      <field name="type">product</field>
+      <field name="list_price">120.00</field>
+      <field name="standard_price">85.00</field>
+    </record>
+    
+    <record id="demo_product_2" model="product.product">
+      <field name="name">Motor de Evaporador 18 000 BTU</field>
+      <field name="type">product</field>
+      <field name="list_price">850.00</field>
+      <field name="standard_price">650.00</field>
+    </record>
+    
+    <record id="demo_product_3" model="product.product">
+      <field name="name">Válvula de Expansión TXV</field>
+      <field name="type">product</field>
+      <field name="list_price">250.00</field>
+      <field name="standard_price">180.00</field>
+    </record>
+    
+    <record id="demo_product_4" model="product.product">
+      <field name="name">Sensor de Deshielo Nevera</field>
+      <field name="type">product</field>
+      <field name="list_price">45.00</field>
+      <field name="standard_price">30.00</field>
+    </record>
+
+    <!-- ========================================================== -->
+    <!-- 5. ÓRDENES DE SERVICIO REALES (fallas típicas)             -->
+    <!-- ========================================================== -->
+    <record id="demo_service_order_1" model="service.order">
+      <field name="name">SO/00001</field>
+      <field name="partner_id" ref="demo_customer_1"></field>
+      <field name="equipment_id" ref="demo_equipment_1"></field>
+      <field name="service_type_id" ref="service_type_repair"></field>
+      <field name="technician_id" ref="demo_technician_1"></field>
+      <field name="date_requested" eval="datetime.datetime.now() - datetime.timedelta(days=5)"/>
+      <field name="date_scheduled" eval="datetime.datetime.now() - datetime.timedelta(days=3)"/>
+      <field name="date_started" eval="datetime.datetime.now() - datetime.timedelta(days=3)"/>
+      <field name="date_completed" eval="datetime.datetime.now() - datetime.timedelta(days=3)"/>
+      <field name="state">completed</field>
+      <field name="priority">high</field>
+      <field name="description">El minisplit no enfría, solo ventila y hace ruido raro en el compresor.</field>
+      <field name="notes">Fuga de gas R-410A en unión de cobre. Compresor sobrecalentado. Recarga de gas R-410A, revisión de uniones y limpieza de serpentín.</field>
+      <field name="duration">2.25</field>
+    </record>
+    
+    <record id="demo_service_order_2" model="service.order">
+      <field name="name">SO/00002</field>
+      <field name="partner_id" ref="demo_customer_1"></field>
+      <field name="equipment_id" ref="demo_equipment_2"></field>
+      <field name="service_type_id" ref="service_type_maintenance"></field>
+      <field name="technician_id" ref="demo_technician_2"></field>
+      <field name="date_requested" eval="datetime.datetime.now() - datetime.timedelta(days=4)"/>
+      <field name="date_scheduled" eval="datetime.datetime.now() - datetime.timedelta(days=2)"/>
+      <field name="date_started" eval="datetime.datetime.now() - datetime.timedelta(days=2)"/>
+      <field name="date_completed" eval="datetime.datetime.now() - datetime.timedelta(days=2)"/>
+      <field name="state">completed</field>
+      <field name="priority">medium</field>
+      <field name="description">Nevera hace hielo en el evaporador y no enfría bien el refri.</field>
+      <field name="notes">Sensor de deshielo defectuoso. Acumulación de hielo en serpentín. Cambio de sensor de deshielo, limpieza de drenaje y calibración.</field>
+      <field name="duration">1.58</field>
+    </record>
+    
+    <record id="demo_service_order_3" model="service.order">
+      <field name="name">SO/00003</field>
+      <field name="partner_id" ref="demo_customer_2"></field>
+      <field name="equipment_id" ref="demo_equipment_3"></field>
+      <field name="service_type_id" ref="service_type_installation"></field>
+      <field name="technician_id" ref="demo_technician_1"></field>
+      <field name="date_requested" eval="datetime.datetime.now() - datetime.timedelta(days=3)"/>
+      <field name="date_scheduled" eval="datetime.datetime.now() + datetime.timedelta(days=1)"/>
+      <field name="state">scheduled</field>
+      <field name="priority">medium</field>
+      <field name="description">Instalar nuevo termostato digital y conectar a red Wi-Fi.</field>
+      <field name="notes">Se requiere cableado adicional para alimentar termostato inteligente.</field>
+    </record>
+    
+    <record id="demo_service_order_4" model="service.order">
+      <field name="name">SO/00004</field>
+      <field name="partner_id" ref="demo_customer_3"></field>
+      <field name="equipment_id" ref="demo_equipment_4"></field>
+      <field name="service_type_id" ref="service_type_repair"></field>
+      <field name="technician_id" ref="demo_technician_2"></field>
+      <field name="date_requested" eval="datetime.datetime.now() - datetime.timedelta(days=2)"/>
+      <field name="date_scheduled" eval="datetime.datetime.now() + datetime.timedelta(days=2)"/>
+      <field name="state">scheduled</field>
+      <field name="priority">urgent</field>
+      <field name="description">Lavadora no centrifuga y muestra código E3.</field>
+    </record>
+
+    <!-- ========================================================== -->
+    <!-- 6. LÍNEAS DE REFACCIÓN                                     -->
+    <!-- ========================================================== -->
+    <record id="demo_refaction_line_1" model="service.order.refaction.line">
+      <field name="order_id" ref="demo_service_order_1"></field>
+      <field name="product_id" ref="demo_product_1"></field>
+      <field name="quantity">1</field>
+      <field name="unit_price">120.00</field>
+      <field name="notes">Filtro de aire nuevo para minisplit 18K</field>
+    </record>
+    
+    <record id="demo_refaction_line_2" model="service.order.refaction.line">
+      <field name="order_id" ref="demo_service_order_2"></field>
+      <field name="product_id" ref="demo_product_4"></field>
+      <field name="quantity">1</field>
+      <field name="unit_price">45.00</field>
+      <field name="notes">Sensor de deshielo original Whirlpool</field>
+    </record>
+  </data>
+</odoo>
